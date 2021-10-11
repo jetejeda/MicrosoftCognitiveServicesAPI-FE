@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UploadService } from '../services/upload.service';
 
 @Component({
   selector: 'app-upload',
@@ -16,7 +17,9 @@ export class UploadComponent implements OnInit {
   email = "";
   formulario = new FormData();
 
-  constructor(private formBuilder: FormBuilder) { 
+  constructor(
+    private formBuilder: FormBuilder,
+    private uploadService: UploadService) { 
 
     this.emailForm = this.formBuilder.group({
       sendToEmail: [false, [Validators.required]],
@@ -51,7 +54,19 @@ export class UploadComponent implements OnInit {
 
         this.formulario.append("image1", new Blob([this.MultipleFile![0]]), this.MultipleFile![0].name);
         this.formulario.append("image2", new Blob([this.MultipleFile![1]]), this.MultipleFile![1].name);
-        
+
+        this.uploadService.sendImages(this.formulario).subscribe(
+          res => {
+
+            console.log("res", res);
+
+          }, err => {
+
+            console.log("Error de respuesta");
+
+          }
+        )
+
       }else{
 
         console.log("Alguno de los archivos hace falta");
