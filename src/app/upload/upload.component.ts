@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 import { UploadService } from '../services/upload.service';
 
 @Component({
@@ -21,7 +22,7 @@ export class UploadComponent implements OnInit {
   url2="../assets/Images/icon-image.jpg";
 
   email = "";
-  formulario = new FormData();
+  form = new FormData();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -47,34 +48,45 @@ export class UploadComponent implements OnInit {
 
     }else{
 
-      this.formulario = new FormData();
+      this.form = new FormData();
       let data = this.emailForm.getRawValue();
 
-      this.formulario.append("email", data.email);
-      this.formulario.append("sendToEmail", data.sendToEmail);
+      this.form.append("email", data.email);
+      this.form.append("sendToEmail", data.sendToEmail);
 
       if(this.MultipleFile?.length == 2 && this.MultipleFile[0] != undefined && this.MultipleFile[1] != undefined){
 
-        this.formulario.append("image1", new Blob([this.MultipleFile![0]]), this.MultipleFile![0].name);
-        this.formulario.append("image2", new Blob([this.MultipleFile![1]]), this.MultipleFile![1].name);
+        this.form.append("image1", new Blob([this.MultipleFile![0]]), this.MultipleFile![0].name);
+        this.form.append("image2", new Blob([this.MultipleFile![1]]), this.MultipleFile![1].name);
 
         this.isWaiting = true;
 
         //* Wait to show temporal result
         setTimeout(() => {  this.isWaiting = false; this.showResult = true; }, 3000);
-
+                
         //* Commented for presentation purpose
-        // this.uploadService.sendImages(this.formulario).subscribe(
-        //   res => {
+        this.uploadService.sendImages(this.form).subscribe(
+          res => {
+            console.log(res);
+            
+            this.isWaiting = false; this.showResult = true;
 
-        //     this.isWaiting = false;
+          }, err => {
 
-        //   }, err => {
+            console.log("Error de respuesta");
+            console.log(err);
 
-        //     console.log("Error de respuesta");
-
-        //   }
-        // )
+            Swal.fire({
+              title: 'Error',
+              text: 'Ocurrió un error, intente de nuevo más tarde.',
+              icon: 'error',
+              customClass:{
+                confirmButton: "md-button",
+              },
+              buttonsStyling: false
+            })
+          }
+        )
 
       }else{
 

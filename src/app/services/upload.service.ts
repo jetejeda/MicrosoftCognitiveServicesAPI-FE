@@ -12,6 +12,7 @@ export class UploadService {
   constructor(private http: HttpClient) { }
 
   sendImages(data: any): Observable<any>{
+
     return this.http.post(environment.sendImage, data).pipe(
       map(res => {
         return res;
