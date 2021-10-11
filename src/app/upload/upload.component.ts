@@ -15,6 +15,7 @@ export class UploadComponent implements OnInit {
   isWaiting: boolean = false;
   showResult: boolean = false;
   waitingImg = '../assets/Images/waiting.gif';
+  tmpResult = '../assets/Images/tmpResult.png'; 
 
   url1="../assets/Images/icon-image.jpg";
   url2="../assets/Images/icon-image.jpg";
@@ -59,17 +60,21 @@ export class UploadComponent implements OnInit {
 
         this.isWaiting = true;
 
-        this.uploadService.sendImages(this.formulario).subscribe(
-          res => {
+        //* Wait to show temporal result
+        setTimeout(() => {  this.isWaiting = false; this.showResult = true; }, 3000);
 
-            this.isWaiting = false;
+        //* Commented for presentation purpose
+        // this.uploadService.sendImages(this.formulario).subscribe(
+        //   res => {
 
-          }, err => {
+        //     this.isWaiting = false;
 
-            console.log("Error de respuesta");
+        //   }, err => {
 
-          }
-        )
+        //     console.log("Error de respuesta");
+
+        //   }
+        // )
 
       }else{
 
@@ -122,15 +127,15 @@ export class UploadComponent implements OnInit {
 
   }
 
-    /**
-     * Add file in form
-     *
-     * Get added file and set it in the form
-     *
-     * @alias           onSelectFile
-     * @param event     e           event that has the checked boolean.
-     * @param boolean   isImage1    Boolean that defines where the actual image is set 
-     *
+  /**
+   * Add file in form
+   *
+   * Get added file and set it in the form
+   *
+   * @alias           onSelectFile
+   * @param event     e           event that has the checked boolean.
+   * @param boolean   isImage1    Boolean that defines where the actual image is set 
+   *
    */
   onSelectFile(e: any, isImage1: boolean){
     
@@ -151,6 +156,10 @@ export class UploadComponent implements OnInit {
         else
           this.url2 = '../assets/Images/icon-image.jpg';
     }
+  }
+
+  reload(){
+    window.location.reload();
   }
 
 }

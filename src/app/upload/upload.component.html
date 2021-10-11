@@ -58,7 +58,11 @@
     </div>
 
     <div *ngIf="!isWaiting && showResult">
-        <!-- TODO: Show image result -->
+        <!-- TODO: Showing temporal image result -->
+        <div class="flex-centered">
+            <img [src]="tmpResult" height="400"/><br>
+            <button mat-flat-button (click)="reload()" color="primary" type="button">¡Intentar de nuevo!</button>
+        </div>
     </div>
     
 
