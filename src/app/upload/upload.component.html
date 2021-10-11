@@ -37,7 +37,7 @@
         <form (ngSubmit)="submitData()" [formGroup]="emailForm">
             <div class="flex-centered">
     
-                <mat-slide-toggle (change)="onChangeSendEmail($event)">¡Enviar resultado a mi correo electrónico!</mat-slide-toggle>
+                <mat-slide-toggle formControlName="sendToEmail" (change)="onChangeSendEmail($event)">¡Enviar resultado a mi correo electrónico!</mat-slide-toggle>
                 
                 <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label>Ingresa tu correo electrónico</mat-label>

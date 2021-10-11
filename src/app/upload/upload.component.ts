@@ -45,6 +45,15 @@ export class UploadComponent implements OnInit {
     if( !this.emailForm.valid ){
 
       console.log("error, email no ingresado");
+      Swal.fire({
+        title: 'Correo Electrónico inválido',
+        text: 'Revise el correo electrónico ingresado e intente de nuevo.',
+        icon: 'error',
+        customClass:{
+          confirmButton: "md-button",
+        },
+        buttonsStyling: false
+      })
 
     }else{
 
@@ -62,8 +71,7 @@ export class UploadComponent implements OnInit {
         this.isWaiting = true;
 
         //* Wait to show temporal result
-        setTimeout(() => {  this.isWaiting = false; this.showResult = true; }, 3000);
-                
+        setTimeout(() => {  this.isWaiting = false; this.showResult = true; }, 3000);           
         //* Commented for presentation purpose
         this.uploadService.sendImages(this.form).subscribe(
           res => {
@@ -90,6 +98,15 @@ export class UploadComponent implements OnInit {
 
       }else{
 
+        Swal.fire({
+          title: 'Archivos faltantes',
+          text: 'Tiene que subir dos imagenes para poder hacer la comparación. Revise las imagenes adjuntas e intente de nuevo.',
+          icon: 'error',
+          customClass:{
+            confirmButton: "md-button",
+          },
+          buttonsStyling: false
+        })
         console.log("Alguno de los archivos hace falta");
         
       }
@@ -122,7 +139,6 @@ export class UploadComponent implements OnInit {
     if(!e.checked){
 
       this.emailForm.get('email')?.clearValidators(); 
-
     }else{
 
       this.emailForm.get('email')?.addValidators(
@@ -135,7 +151,6 @@ export class UploadComponent implements OnInit {
     }
 
     this.emailForm.get('email')?.updateValueAndValidity();
-
 
   }
 
