@@ -46,11 +46,16 @@ export class UploadComponent implements OnInit {
       this.formulario.append("sendToEmail", data.sendToEmail);
 
       console.log(this.MultipleFile)
+
       if(this.MultipleFile?.length == 2){
+
         this.formulario.append("image1", new Blob([this.MultipleFile[0]]), this.MultipleFile[0].name);
         this.formulario.append("image2", new Blob([this.MultipleFile[1]]), this.MultipleFile[1].name);
+        
       }else{
+
         console.log("Alguno de los archivos hace falta");
+        
       }
 
     }
@@ -114,7 +119,7 @@ export class UploadComponent implements OnInit {
    */
   onSelectFile(e: any, isImage1: boolean){
     
-    if(e.target.files){
+    if(e.target.files.length > 0){
 
       let reader = new FileReader();
       reader.readAsDataURL(e.target.files[0]);
@@ -125,6 +130,11 @@ export class UploadComponent implements OnInit {
           this.url2 = event.target.result;
       }
 
+    }else{
+      if(isImage1)
+          this.url1 = '../assets/Images/icon-image.jpg';
+        else
+          this.url2 = '../assets/Images/icon-image.jpg';
     }
   }
 
