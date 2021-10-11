@@ -47,10 +47,10 @@ export class UploadComponent implements OnInit {
 
       console.log(this.MultipleFile)
 
-      if(this.MultipleFile?.length == 2){
+      if(this.MultipleFile?.length == 2 && this.MultipleFile[0] != undefined && this.MultipleFile[1] != undefined){
 
-        this.formulario.append("image1", new Blob([this.MultipleFile[0]]), this.MultipleFile[0].name);
-        this.formulario.append("image2", new Blob([this.MultipleFile[1]]), this.MultipleFile[1].name);
+        this.formulario.append("image1", new Blob([this.MultipleFile![0]]), this.MultipleFile![0].name);
+        this.formulario.append("image2", new Blob([this.MultipleFile![1]]), this.MultipleFile![1].name);
         
       }else{
 
@@ -63,17 +63,13 @@ export class UploadComponent implements OnInit {
 
   onFileUpload(e:any, isImage1: boolean){
 
-    if(e.target.files){
-
-      if(isImage1){
-        this.MultipleFile![0] = e.target.files[0];
-      }else{
-        this.MultipleFile![1] = e.target.files[0];
-      }
-
-      this.onSelectFile(e, isImage1);
-
+    if(isImage1){
+      this.MultipleFile![0] = e.target.files[0];
+    }else{
+      this.MultipleFile![1] = e.target.files[0];
     }
+
+    this.onSelectFile(e, isImage1);
   }
 
   /**
