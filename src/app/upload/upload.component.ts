@@ -10,10 +10,15 @@ import { UploadService } from '../services/upload.service';
 export class UploadComponent implements OnInit {
   
   emailForm: FormGroup;
-  isWaiting: boolean = false;
   disabled = true;
+
+  isWaiting: boolean = false;
+  showResult: boolean = false;
+  waitingImg = '../assets/Images/waiting.gif';
+
   url1="../assets/Images/icon-image.jpg";
   url2="../assets/Images/icon-image.jpg";
+
   email = "";
   formulario = new FormData();
 
@@ -28,10 +33,10 @@ export class UploadComponent implements OnInit {
 
   }
 
+  MultipleFile?: Array<File> = [];
+
   ngOnInit(): void {
   }
-
-  MultipleFile?: Array<File> = [];
 
   submitData(){
     
@@ -41,24 +46,23 @@ export class UploadComponent implements OnInit {
 
     }else{
 
-      let data = this.emailForm.getRawValue();
-
       this.formulario = new FormData();
+      let data = this.emailForm.getRawValue();
 
       this.formulario.append("email", data.email);
       this.formulario.append("sendToEmail", data.sendToEmail);
-
-      console.log(this.MultipleFile)
 
       if(this.MultipleFile?.length == 2 && this.MultipleFile[0] != undefined && this.MultipleFile[1] != undefined){
 
         this.formulario.append("image1", new Blob([this.MultipleFile![0]]), this.MultipleFile![0].name);
         this.formulario.append("image2", new Blob([this.MultipleFile![1]]), this.MultipleFile![1].name);
 
+        this.isWaiting = true;
+
         this.uploadService.sendImages(this.formulario).subscribe(
           res => {
 
-            console.log("res", res);
+            this.isWaiting = false;
 
           }, err => {
 

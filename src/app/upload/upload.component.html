@@ -15,36 +15,51 @@
         <mat-card-title>¿Quieres saber qué tanto te pareces a otros?</mat-card-title>
     </div>
 
-    <div class="flexbox-parent">
+    <div *ngIf="isWaiting && !showResult">
         <div class="flex-centered">
-            <img [src]="url1" height="200"/><br>
-            <input type="file" (change)="onFileUpload($event, true)" accept=".png, .jpg"/>
-        </div>
-
-        <div class="flex-centered">
-            <img [src]="url2" height="200"/><br>
-            <input type="file" (change)="onFileUpload($event, false)" accept=".png, .jpg"/>
+            <img [src]="waitingImg" height="200"/><br>
         </div>
     </div>
-    <form (ngSubmit)="submitData()" [formGroup]="emailForm">
-        <div class="flex-centered">
+    
+    <div *ngIf="!isWaiting && !showResult">
 
-            <mat-slide-toggle (change)="onChangeSendEmail($event)">¡Enviar resultado a mi correo electrónico!</mat-slide-toggle>
-            
-            <mat-form-field class="example-full-width" appearance="fill">
-                <mat-label>Ingresa tu correo electrónico</mat-label>
-
-                <input formControlName="email" id="email" name="email" [(ngModel)]="email" matInput placeholder="prueba@correo.com" [attr.readOnly]="disabled?'':null"/>
-                
-                
-            </mat-form-field>
-            <div *ngIf="emailForm.get('email')?.errors && emailForm.controls['email']?.touched">
-                <p style="color:red">Correo electrónico no válido.</p> 
+        <div class="flexbox-parent">
+            <div class="flex-centered">
+                <img [src]="url1" height="200"/><br>
+                <input type="file" (change)="onFileUpload($event, true)" accept=".png, .jpg"/>
             </div>
-
-            <button mat-flat-button color="primary" type="submit">¡Calcular Porcentaje de Parentesco!</button>
-
+    
+            <div class="flex-centered">
+                <img [src]="url2" height="200"/><br>
+                <input type="file" (change)="onFileUpload($event, false)" accept=".png, .jpg"/>
+            </div>
         </div>
-    </form>
+        <form (ngSubmit)="submitData()" [formGroup]="emailForm">
+            <div class="flex-centered">
+    
+                <mat-slide-toggle (change)="onChangeSendEmail($event)">¡Enviar resultado a mi correo electrónico!</mat-slide-toggle>
+                
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Ingresa tu correo electrónico</mat-label>
+    
+                    <input formControlName="email" id="email" name="email" [(ngModel)]="email" matInput placeholder="prueba@correo.com" [attr.readOnly]="disabled?'':null"/>
+                    
+                    
+                </mat-form-field>
+                <div *ngIf="emailForm.get('email')?.errors && emailForm.controls['email']?.touched">
+                    <p style="color:red">Correo electrónico no válido.</p> 
+                </div>
+    
+                <button mat-flat-button color="primary" type="submit">¡Calcular Porcentaje de Parentesco!</button>
+    
+            </div>
+        </form>
+
+    </div>
+
+    <div *ngIf="!isWaiting && showResult">
+        <!-- TODO: Show image result -->
+    </div>
+    
 
 </mat-card>
