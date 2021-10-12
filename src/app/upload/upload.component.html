@@ -1,18 +1,18 @@
-<p>
+<p class="animate__animated animate__fadeIn">
     <mat-toolbar color="primary">
       <mat-toolbar-row>
         <span>Mi Parentesco Familiar</span>
         <span class="example-spacer"></span>
-        <button mat-icon-button class="example-icon">
+        <!-- <button mat-icon-button class="example-icon">
           <mat-icon>menu</mat-icon>
-        </button>
+        </button> -->
       </mat-toolbar-row>
     </mat-toolbar>
 </p>
 <mat-card>
 
     <div class="flex-centered color-red">
-        <mat-card-title>¿Quieres saber qué tanto te pareces a otros?</mat-card-title>
+        <mat-card-title class="animate__animated animate__bounceInDown">¿Quieres saber qué tanto te pareces a otros?</mat-card-title>
     </div>
 
     <div *ngIf="isWaiting && !showResult">
@@ -24,17 +24,17 @@
     <div *ngIf="!isWaiting && !showResult">
 
         <div class="flexbox-parent">
-            <div class="flex-centered">
+            <div class="flex-centered animate__animated animate__backInLeft">
                 <img [src]="url1" height="200"/><br>
                 <input type="file" (change)="onFileUpload($event, true)" accept=".png, .jpg"/>
             </div>
     
-            <div class="flex-centered">
+            <div class="flex-centered animate__animated animate__backInRight">
                 <img [src]="url2" height="200"/><br>
                 <input type="file" (change)="onFileUpload($event, false)" accept=".png, .jpg"/>
             </div>
         </div>
-        <form (ngSubmit)="submitData()" [formGroup]="emailForm">
+        <form (ngSubmit)="submitData()" [formGroup]="emailForm" class="animate__animated animate__fadeInUpBig">
             <div class="flex-centered">
     
                 <mat-slide-toggle formControlName="sendToEmail" (change)="onChangeSendEmail($event)">¡Enviar resultado a mi correo electrónico!</mat-slide-toggle>
