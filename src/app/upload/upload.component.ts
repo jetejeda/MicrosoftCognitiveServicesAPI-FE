@@ -22,6 +22,7 @@ export class UploadComponent implements OnInit {
   url2="../assets/Images/icon-image.jpg";
 
   email = "";
+  useEmail = false;
   form = new FormData();
 
   constructor(
@@ -71,7 +72,8 @@ export class UploadComponent implements OnInit {
         this.isWaiting = true;
 
         //* Wait to show temporal result
-        setTimeout(() => {  this.isWaiting = false; this.showResult = true; }, 3000);           
+        //setTimeout(() => {  this.isWaiting = false; this.showResult = true; }, 3000); 
+
         //* Commented for presentation purpose
         this.uploadService.sendImages(this.form).subscribe(
           res => {
@@ -83,7 +85,6 @@ export class UploadComponent implements OnInit {
 
             console.log("Error de respuesta");
             console.log(err);
-
             Swal.fire({
               title: 'Error',
               text: 'Ocurrió un error, intente de nuevo más tarde.',
@@ -93,6 +94,8 @@ export class UploadComponent implements OnInit {
               },
               buttonsStyling: false
             })
+            this.isWaiting = false;
+
           }
         )
 
@@ -139,8 +142,9 @@ export class UploadComponent implements OnInit {
     if(!e.checked){
 
       this.emailForm.get('email')?.clearValidators(); 
+      this.useEmail = false;
     }else{
-
+      this.useEmail = true;
       this.emailForm.get('email')?.addValidators(
         [
           Validators.required,

@@ -39,13 +39,13 @@
     
                 <mat-slide-toggle formControlName="sendToEmail" (change)="onChangeSendEmail($event)">¡Enviar resultado a mi correo electrónico!</mat-slide-toggle>
                 
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="fill" *ngIf="useEmail">
                     <mat-label>Ingresa tu correo electrónico</mat-label>
     
                     <input formControlName="email" id="email" name="email" [(ngModel)]="email" matInput placeholder="prueba@correo.com" [attr.readOnly]="disabled?'':null"/>
                     
                     
-                </mat-form-field>
+                </mat-form-field >
                 <div *ngIf="emailForm.get('email')?.errors && emailForm.controls['email']?.touched">
                     <p style="color:red">Correo electrónico no válido.</p> 
                 </div>
