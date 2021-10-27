@@ -15,6 +15,24 @@
         <mat-card-title class="animate__animated animate__bounceInDown">¿Quieres saber qué tanto te pareces a otros?</mat-card-title>
     </div>
 
+    <div *ngIf="!showCamera" class="flex-centered color-red">
+        <button mat-flat-button color="primary" (click)="showCamera = true">Tomar foto con cámara</button>
+    </div>
+    <div *ngIf="showCamera" class="flex-centered color-red">
+        <button mat-flat-button color="warn" (click)="showCamera = false">Apagar cámara</button>
+    </div>
+
+    <div *ngIf="showCamera" class="flex-centered color-red">
+        <webcam [height]="500" [width]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event, isImage1)"></webcam>
+        
+        <button mat-flat-button color="primary" class="actionBtn" (click)="triggerSnapshot();">¡Tomar foto!</button>
+        
+        <!-- <div class="snapshot" *ngIf="webcamImage">
+            <h2>Vista Previa de imagenes</h2>
+            <img [src]="webcamImage.imageAsDataUrl"/>
+        </div> -->
+    </div>
+
     <div *ngIf="isWaiting && !showResult">
         <div class="flex-centered">
             <img [src]="waitingImg" height="200"/><br>

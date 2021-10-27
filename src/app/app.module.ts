@@ -16,6 +16,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
+import { WebcamModule } from 'ngx-webcam';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {MatIconModule} from '@angular/material/icon';
     MatSlideToggleModule,
     MatToolbarModule,
     MatIconModule,
-    HttpClientModule
+    HttpClientModule,
+    WebcamModule
   ],
   providers: [],
   bootstrap: [AppComponent]

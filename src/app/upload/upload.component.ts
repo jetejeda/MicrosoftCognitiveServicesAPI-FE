@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { UploadService } from '../services/upload.service';
+import {WebcamImage} from 'ngx-webcam';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-upload',
@@ -10,11 +12,17 @@ import { UploadService } from '../services/upload.service';
 })
 export class UploadComponent implements OnInit {
   
+  public webcamImage!: WebcamImage;
+  private trigger: Subject<void> = new Subject<void>();
+  
   emailForm: FormGroup;
   disabled = true;
 
+  showCamera: boolean = false;
   isWaiting: boolean = false;
   showResult: boolean = false;
+  isImage1: boolean = true;
+
   waitingImg = '../assets/Images/waiting.gif';
   tmpResult = '../assets/Images/tmpResult.png'; 
 
@@ -41,6 +49,44 @@ export class UploadComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  //* Camera controls and functions
+  triggerSnapshot(): void {
+    this.trigger.next();
+  }
+  
+  handleImage(webcamImage: WebcamImage, isImage1: boolean): void {
+    console.info('received webcam image', webcamImage);
+    this.webcamImage = webcamImage;
+    if(isImage1){
+      this.url1 = webcamImage.imageAsDataUrl;
+      this.isImage1 = false;
+    }else{
+      this.url2 = webcamImage.imageAsDataUrl;
+    }
+    let file = this.dataURLtoFile(webcamImage.imageAsDataUrl, 'image.png');
+    this.onFileUploadAfterConvertedBase64(file, isImage1);
+  }
+
+  public get triggerObservable(): Observable<void> {
+    return this.trigger.asObservable();
+  }
+
+  dataURLtoFile(dataurl: any, filename: any) {
+ 
+    var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), 
+        n = bstr.length, 
+        u8arr = new Uint8Array(n);
+        
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    
+    return new File([u8arr], filename, {type:mime});
+}
+
+  //* Data submit and post to backend
   submitData(){
     
     if( !this.emailForm.valid ){
@@ -117,26 +163,25 @@ export class UploadComponent implements OnInit {
     }
   }
 
+  //* File upload functions
   onFileUpload(e:any, isImage1: boolean){
-
     if(isImage1){
       this.MultipleFile![0] = e.target.files[0];
     }else{
       this.MultipleFile![1] = e.target.files[0];
     }
-
     this.onSelectFile(e, isImage1);
   }
 
-  /**
-   * Get toogle value.
-   *
-   * Get toogle value to use it to validate email or not.
-   *
-   * @alias    onChangeSendEmail
-   * @param event   e           event that has the checked boolean.
-   *
-   */
+  onFileUploadAfterConvertedBase64(file:any, isImage1: boolean){
+    if(isImage1){
+      this.MultipleFile![0] = file;
+    }else{
+      this.MultipleFile![1] = file;
+    }
+    this.onSelectFileAfterConvertedBase64(file, isImage1);
+  }
+
   onChangeSendEmail(e:any){
 
     if(!e.checked){
@@ -158,22 +203,33 @@ export class UploadComponent implements OnInit {
 
   }
 
-  /**
-   * Add file in form
-   *
-   * Get added file and set it in the form
-   *
-   * @alias           onSelectFile
-   * @param event     e           event that has the checked boolean.
-   * @param boolean   isImage1    Boolean that defines where the actual image is set 
-   *
-   */
   onSelectFile(e: any, isImage1: boolean){
     
     if(e.target.files.length > 0){
 
       let reader = new FileReader();
       reader.readAsDataURL(e.target.files[0]);
+      reader.onload = (event: any)=>{
+        if(isImage1)
+          this.url1 = event.target.result;
+        else
+          this.url2 = event.target.result;
+      }
+
+    }else{
+      if(isImage1)
+          this.url1 = '../assets/Images/icon-image.jpg';
+        else
+          this.url2 = '../assets/Images/icon-image.jpg';
+    }
+  }
+
+  onSelectFileAfterConvertedBase64(file: any, isImage1: boolean){
+    
+    if(file){
+
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
       reader.onload = (event: any)=>{
         if(isImage1)
           this.url1 = event.target.result;
