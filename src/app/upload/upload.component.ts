@@ -5,6 +5,7 @@ import { UploadService } from '../services/upload.service';
 import {WebcamImage} from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { ReCaptchaV3Service } from 'ngx-captcha';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload',
@@ -39,12 +40,13 @@ export class UploadComponent implements OnInit {
   constructor(
     private reCaptchaV3Service: ReCaptchaV3Service,
     private formBuilder: FormBuilder,
-    private uploadService: UploadService) { 
+    private uploadService: UploadService,
+    public router: Router) { 
 
     this.emailForm = this.formBuilder.group({
       sendToEmail: [false, [Validators.required]],
       email: ['', [] ],
-      recaptcha: ['', Validators.required]
+      recaptcha: ['', null] //! AGREGAR COMO REQUERIDO
     });
 
   }
@@ -123,7 +125,8 @@ export class UploadComponent implements OnInit {
         this.isWaiting = true;
 
         //* Wait to show temporal result
-        //setTimeout(() => {  this.isWaiting = false; this.showResult = true; }, 3000); 
+            
+        //setTimeout(() => {  this.isWaiting = false; this.showResult = true; this.router.navigate(['/result', 123]); }, 3000); 
 
         //* Commented for presentation purpose
         this.uploadService.sendImages(this.form).subscribe(
@@ -131,6 +134,7 @@ export class UploadComponent implements OnInit {
             console.log(res);
             
             this.isWaiting = false; this.showResult = true;
+            this.router.navigate(['/result', 123]);
 
           }, err => {
 

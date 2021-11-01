@@ -1,0 +1,40 @@
+<p class="animate__animated animate__fadeIn">
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <span>Mi Parentesco Familiar</span>
+        <span class="example-spacer"></span>
+        <!-- <button mat-icon-button class="example-icon">
+          <mat-icon>menu</mat-icon>
+        </button> -->
+      </mat-toolbar-row>
+    </mat-toolbar>
+</p>
+<mat-card>
+
+    <div class="flex-centered color-red">
+        <mat-card-title class="animate__animated animate__bounceInDown">¿Quieres saber qué tanto te pareces a otros?</mat-card-title>
+    </div>
+
+    <div>
+        <!-- TODO: Showing temporal image result -->
+        <div class="flex-centered">
+            <img [src]="tmpResult" height="400"/><br>
+            <button mat-flat-button (click)="reload()" color="primary" type="button">¡Intentar de nuevo!</button>
+        </div>
+        
+        <h1>Angular Share Buttons</h1>
+        
+        <share-buttons theme="circles-dark"
+            [include]="['copy', 'facebook', 'email', 'twitter', 'whatsapp']"
+            [showIcon]="true"
+            [showText]="true"
+            url="https://google.com"
+            description="Ve tus resultados aquí: "
+            twitterAccount="rodrigokamada"
+            class="pt-5">
+        </share-buttons>
+
+    </div>
+    
+      
+</mat-card>
