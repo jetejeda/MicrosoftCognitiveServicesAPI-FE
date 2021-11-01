@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { UploadService } from '../services/upload.service';
 import {WebcamImage} from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
+import { ReCaptchaV3Service } from 'ngx-captcha';
 
 @Component({
   selector: 'app-upload',
@@ -33,13 +34,17 @@ export class UploadComponent implements OnInit {
   useEmail = false;
   form = new FormData();
 
+  siteKey: string = '6Lc2aAodAAAAAIr3q8VXdi4T9SLyVN_uwX9nCmNl';
+
   constructor(
+    private reCaptchaV3Service: ReCaptchaV3Service,
     private formBuilder: FormBuilder,
     private uploadService: UploadService) { 
 
     this.emailForm = this.formBuilder.group({
       sendToEmail: [false, [Validators.required]],
-      email: ['', [] ]
+      email: ['', [] ],
+      recaptcha: ['', Validators.required]
     });
 
   }
@@ -162,9 +167,22 @@ export class UploadComponent implements OnInit {
 
     }
   }
+  getBase64(file: File) {
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    let base64 = '';
+    reader.onload = function () {
+      return ((reader.result)?.toString());
 
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+ }
   //* File upload functions
   onFileUpload(e:any, isImage1: boolean){
+    let test = this.getBase64(e.target.files[0])
+    console.log(test)
     if(isImage1){
       this.MultipleFile![0] = e.target.files[0];
     }else{

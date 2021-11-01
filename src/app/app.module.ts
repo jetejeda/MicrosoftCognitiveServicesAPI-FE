@@ -7,6 +7,7 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { UploadComponent } from './upload/upload.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxCaptchaModule } from 'ngx-captcha';
 
 //* Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -37,7 +38,8 @@ import { WebcamModule } from 'ngx-webcam';
     MatToolbarModule,
     MatIconModule,
     HttpClientModule,
-    WebcamModule
+    WebcamModule,
+    NgxCaptchaModule
   ],
   providers: [],
   bootstrap: [AppComponent]
