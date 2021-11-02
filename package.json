@@ -26,6 +26,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@ng-bootstrap/ng-bootstrap": "^11.0.0-beta.2",
     "animate.css": "^4.1.1",
+    "base64-js": "^1.5.1",
     "bootstrap": "^5.1.3",
     "bootstrap-icons": "^1.6.1",
     "hammerjs": "^2.0.8",

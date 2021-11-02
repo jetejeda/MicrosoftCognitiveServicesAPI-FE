@@ -26,11 +26,7 @@
         <webcam [height]="500" [width]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event, isImage1)"></webcam>
         
         <button mat-flat-button color="primary" class="actionBtn" (click)="triggerSnapshot();">¡Tomar foto!</button>
-        
-        <!-- <div class="snapshot" *ngIf="webcamImage">
-            <h2>Vista Previa de imagenes</h2>
-            <img [src]="webcamImage.imageAsDataUrl"/>
-        </div> -->
+
     </div>
 
     <div *ngIf="isWaiting && !showResult">
@@ -60,19 +56,6 @@
             </ngx-invisible-recaptcha>
 
             <div class="flex-centered">
-    
-                <mat-slide-toggle formControlName="sendToEmail" (change)="onChangeSendEmail($event)">¡Enviar resultado a mi correo electrónico!</mat-slide-toggle>
-                
-                <mat-form-field class="example-full-width" appearance="fill" *ngIf="useEmail">
-                    <mat-label>Ingresa tu correo electrónico</mat-label>
-    
-                    <input formControlName="email" id="email" name="email" [(ngModel)]="email" matInput placeholder="prueba@correo.com" [attr.readOnly]="disabled?'':null"/>
-                    
-                    
-                </mat-form-field >
-                <div *ngIf="emailForm.get('email')?.errors && emailForm.controls['email']?.touched">
-                    <p style="color:red">Correo electrónico no válido.</p> 
-                </div>
     
                 <button mat-flat-button color="primary" type="submit">¡Calcular Porcentaje de Parentesco!</button>
     

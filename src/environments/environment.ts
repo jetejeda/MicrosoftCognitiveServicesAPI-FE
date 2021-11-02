@@ -6,7 +6,10 @@
 export const environment = {
   production: false,
   
-  sendImage:  `${base}getRelationship`
+  url: 'localhost:4200',
+
+  sendImage:  `${base}getRelationship`,
+  getImage:  `${base}getImageById`
   
 };
 

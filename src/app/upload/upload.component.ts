@@ -44,14 +44,12 @@ export class UploadComponent implements OnInit {
     public router: Router) { 
 
     this.emailForm = this.formBuilder.group({
-      sendToEmail: [false, [Validators.required]],
-      email: ['', [] ],
       recaptcha: ['', null] //! AGREGAR COMO REQUERIDO
     });
 
   }
 
-  MultipleFile?: Array<File> = [];
+  MultipleFile?: Array<string> = [];
 
   ngOnInit(): void {
   }
@@ -62,7 +60,7 @@ export class UploadComponent implements OnInit {
   }
   
   handleImage(webcamImage: WebcamImage, isImage1: boolean): void {
-    console.info('received webcam image', webcamImage);
+    
     this.webcamImage = webcamImage;
     if(isImage1){
       this.url1 = webcamImage.imageAsDataUrl;
@@ -70,8 +68,7 @@ export class UploadComponent implements OnInit {
     }else{
       this.url2 = webcamImage.imageAsDataUrl;
     }
-    let file = this.dataURLtoFile(webcamImage.imageAsDataUrl, 'image.png');
-    this.onFileUploadAfterConvertedBase64(file, isImage1);
+    this.onFileUploadAfterConvertedBase64(webcamImage.imageAsDataUrl, isImage1);
   }
 
   public get triggerObservable(): Observable<void> {
@@ -113,28 +110,24 @@ export class UploadComponent implements OnInit {
 
       this.form = new FormData();
       let data = this.emailForm.getRawValue();
-
-      this.form.append("email", data.email);
-      this.form.append("sendToEmail", data.sendToEmail);
-
+      
       if(this.MultipleFile?.length == 2 && this.MultipleFile[0] != undefined && this.MultipleFile[1] != undefined){
 
-        this.form.append("image1", new Blob([this.MultipleFile![0]]), this.MultipleFile![0].name);
-        this.form.append("image2", new Blob([this.MultipleFile![1]]), this.MultipleFile![1].name);
+        data.image1 = this.MultipleFile![0].split(',')[1];
+        data.image2 = this.MultipleFile![1].split(',')[1];
 
         this.isWaiting = true;
-
         //* Wait to show temporal result
             
         //setTimeout(() => {  this.isWaiting = false; this.showResult = true; this.router.navigate(['/result', 123]); }, 3000); 
 
         //* Commented for presentation purpose
-        this.uploadService.sendImages(this.form).subscribe(
+        this.uploadService.sendImages(data).subscribe(
           res => {
-            console.log(res);
+            console.log("res de  mario", res);
             
             this.isWaiting = false; this.showResult = true;
-            this.router.navigate(['/result', 123]);
+            this.router.navigate(['/result', res.id]);
 
           }, err => {
 
@@ -171,31 +164,33 @@ export class UploadComponent implements OnInit {
 
     }
   }
-  getBase64(file: File) {
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    let base64 = '';
-    reader.onload = function () {
-      return ((reader.result)?.toString());
 
-    };
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    };
- }
+  getBase64(file: File) {
+    return new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            resolve(reader.result);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    }).then(base64 => { return base64 });
+  }
   //* File upload functions
-  onFileUpload(e:any, isImage1: boolean){
-    let test = this.getBase64(e.target.files[0])
-    console.log(test)
+  async onFileUpload(e:any, isImage1: boolean){
+
+    let promise = (await this.getBase64(e.target.files[0]));
+
     if(isImage1){
-      this.MultipleFile![0] = e.target.files[0];
+      this.MultipleFile![0] = promise as string;
     }else{
-      this.MultipleFile![1] = e.target.files[0];
+      this.MultipleFile![1] = promise as string;
     }
+
     this.onSelectFile(e, isImage1);
   }
 
   onFileUploadAfterConvertedBase64(file:any, isImage1: boolean){
+
     if(isImage1){
       this.MultipleFile![0] = file;
     }else{
@@ -250,14 +245,10 @@ export class UploadComponent implements OnInit {
     
     if(file){
 
-      let reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event: any)=>{
         if(isImage1)
-          this.url1 = event.target.result;
+          this.url1 = file;
         else
-          this.url2 = event.target.result;
-      }
+          this.url2 = file;
 
     }else{
       if(isImage1)

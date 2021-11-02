@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { catchError, map } from 'rxjs/operators';
 
@@ -20,6 +20,17 @@ export class UploadService {
       catchError(err => {
         return throwError(err);
       })
+    )
+  }
+
+  getImage(id: any): Observable<any>{
+    let options =  new HttpParams();
+    options = options.append('id', id);
+    return this.http.get(environment.getImage, {params: options}).pipe(
+      map(res => {
+        return res;
+      }),
+      catchError(err => of(err))
     )
   }
 }

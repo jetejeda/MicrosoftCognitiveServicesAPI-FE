@@ -18,7 +18,7 @@
     <div>
         <!-- TODO: Showing temporal image result -->
         <div class="flex-centered">
-            <img [src]="tmpResult" height="400"/><br>
+            <img [src]="result" height="400"/><br>
             <button mat-flat-button (click)="reload()" color="primary" type="button">¡Intentar de nuevo!</button>
         </div>
         
@@ -28,7 +28,7 @@
             [include]="['copy', 'facebook', 'email', 'twitter', 'whatsapp']"
             [showIcon]="true"
             [showText]="true"
-            url="https://google.com"
+            url="router.url"
             description="Ve tus resultados aquí: "
             twitterAccount="rodrigokamada"
             class="pt-5">
